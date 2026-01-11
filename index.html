@@ -4,268 +4,239 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Happy Birthday E-Card</title>
+
 <style>
-/* Reset */
-* { margin:0; padding:0; box-sizing:border-box; font-family: 'Arial', sans-serif; }
-body, html { width:100%; height:100%; overflow:hidden; background: #f0f0f0; }
+* { margin:0; padding:0; box-sizing:border-box; font-family: Arial, sans-serif; }
+body, html { width:100%; height:100%; overflow:hidden; background:#f0f0f0; }
 
-/* Page style */
-.page { 
-    width:100%; height:100%; position:absolute; top:0; left:0; 
-    display:flex; justify-content:center; align-items:center; flex-direction:column; 
-    transition: opacity 0.8s ease; 
-    background: url("images/background.png") no-repeat center center/cover; 
-    padding: 20px;
+.page{
+    width:100%; height:100%; position:absolute;
+    display:flex; justify-content:center; align-items:center;
+    flex-direction:column; padding:20px;
+    background:url("images/background.png") no-repeat center/cover;
 }
-.page.hidden { display:none; opacity:0; pointer-events:none; }
 
-/* Transition overlay */
-.transition-overlay {
-    position: fixed; top: 0; left: 0; width:100%; height:100%; 
-    background: white; z-index: 100; opacity:0; pointer-events:none;
-    transition: opacity 1s ease;
+.hidden{ display:none; }
+
+/* Transition */
+.transition-overlay{
+    position:fixed; inset:0;
+    background:white; opacity:0;
+    transition:opacity 1s ease;
+    z-index:100;
 }
-.transition-overlay.active { opacity:1; pointer-events:all; }
+.transition-overlay.active{ opacity:1; }
 
-/* Cake page */
-#page0 { z-index:20; }
-.cake-container { position: relative; width:540px; height:360px; }
-.cake-img { width:100%; height:100%; }
-.candle { position:absolute; width:8px; height:25px; background:red; top:30px; border-radius:4px; }
-.flame { position:absolute; top:-15px; left:-3px; width:12px; height:15px; background:orange; border-radius:50%; animation: flicker 0.2s infinite alternate; }
-@keyframes flicker { 0%{opacity:1;}50%{opacity:0.6;}100%{opacity:1;} }
+/* Cake */
+.cake-container{ width:540px; height:360px; cursor:pointer; }
+.cake-img{ width:100%; height:100%; }
 
-/* Envelope page */
-#page1 { z-index:10; }
-.animated-envelope { width:100vw; height:100vh; object-fit:cover; }
-.animated-envelope.opening { animation: envelopeOpen 0.8s forwards; }
-@keyframes envelopeOpen { 0%{transform:scale(1) rotate(0deg);} 50%{transform:scale(1.05) rotate(3deg);} 100%{transform:scale(1.2) rotate(0deg);opacity:0;} }
+/* Envelope */
+.animated-envelope{
+    width:100vw; height:100vh;
+    object-fit:cover;
+}
+.opening{
+    animation: envelopeOpen 0.8s forwards;
+}
+@keyframes envelopeOpen{
+    0%{ transform:scale(1); }
+    50%{ transform:scale(1.05) rotate(3deg); }
+    100%{ transform:scale(1.2); opacity:0; }
+}
 
-/* Happy Birthday Page */
-#page2 { z-index:5; }
-#page2 h1 { font-size:5rem; color:yellow; text-shadow:2px 2px 10px #000; text-align:center; margin-bottom:2rem; }
-.floating-icon { position:absolute; animation: floatAnim 6s ease-in-out infinite alternate; }
-.floating-icon.big { width:150px; height:150px; object-fit:contain; }
-.floating-icon.small { width:80px; height:80px; object-fit:contain; }
-@keyframes floatAnim { 0%{transform:translateY(0);}50%{transform:translateY(-20px);}100%{transform:translateY(0);} }
-.balloon { position:absolute; width:50px; font-size:2rem; animation: rise linear infinite; }
-@keyframes rise {0%{transform:translateY(100vh);}100%{transform:translateY(-150px);} }
+/* Birthday page */
+#page2 h1{
+    font-size:5rem;
+    color:yellow;
+    text-shadow:2px 2px 10px #000;
+}
+.floating-icon{
+    position:absolute;
+    animation:floatAnim 6s ease-in-out infinite alternate;
+}
+@keyframes floatAnim{
+    0%{ transform:translateY(0); }
+    50%{ transform:translateY(-20px); }
+    100%{ transform:translateY(0); }
+}
+.balloon{
+    position:absolute;
+    font-size:2rem;
+    animation:rise linear infinite;
+}
+@keyframes rise{
+    from{ transform:translateY(100vh); }
+    to{ transform:translateY(-150px); }
+}
 
-/* Photo Page */
-#page3 { z-index:5; }
-#page3 .photo-container { width:537px; height:334px; margin-bottom:20px; display:flex; justify-content:center; align-items:center; }
-#page3 img.photo { width:100%; height:100%; border-radius:15px; box-shadow:0 0 25px rgba(0,0,0,0.6); border:3px solid #fff; object-fit:cover; }
-#page3 .typing { margin-top:20px; font-size:2rem; border-right:3px solid black; white-space:nowrap; overflow:hidden; color:#333; font-weight:bold; }
-#nextBtn { margin-top:30px; padding:15px 35px; font-size:1.2rem; border:none; border-radius:30px;
-    background: linear-gradient(45deg,#ff7e5f,#feb47b); cursor:pointer; box-shadow:0 0 15px rgba(0,0,0,0.4); color:white; font-weight:bold; transition: transform 0.3s;}
-#nextBtn:hover { transform: scale(1.05); }
+/* Photo page */
+.photo-container{
+    width:537px; height:334px;
+}
+.photo{
+    width:100%; height:100%;
+    border-radius:15px;
+    box-shadow:0 0 25px rgba(0,0,0,0.6);
+    object-fit:cover;
+}
+.typing{
+    margin-top:20px;
+    font-size:2rem;
+    border-right:3px solid black;
+    white-space:nowrap;
+    overflow:hidden;
+}
+#nextBtn{
+    margin-top:30px;
+    padding:15px 35px;
+    font-size:1.2rem;
+    border:none;
+    border-radius:30px;
+    background:linear-gradient(45deg,#ff7e5f,#feb47b);
+    color:white;
+    cursor:pointer;
+}
 
-/* Letter Page */
-#page4 { overflow-y:auto; justify-content:flex-start; padding-top:50px; z-index:5; }
-#page4 h2 { font-size:2.5rem; margin-bottom:20px; color:#c0392b; }
-#page4 .letter { font-size:1.3rem; max-width:80%; line-height:1.8; color:#333; text-align:center; margin-bottom:30px; }
-
-/* Responsive */
-@media (max-width:600px) {
-    #page2 h1 { font-size:3rem; }
-    #page3 .photo-container { width:90vw; height:auto; }
-    #page3 .typing { font-size:1.5rem; }
-    #page4 h2 { font-size:2rem; }
-    #page4 .letter { font-size:1.1rem; max-width:95%; }
+/* Letter */
+#page4{
+    overflow-y:auto;
+    padding-top:50px;
+}
+.letter{
+    font-size:1.3rem;
+    max-width:80%;
+    line-height:1.8;
+    text-align:center;
 }
 </style>
 </head>
+
 <body>
 
 <div class="transition-overlay" id="transitionOverlay"></div>
 
-<!-- PAGE 0 - Cake -->
+<!-- PAGE 0 -->
 <div class="page" id="page0">
     <div class="cake-container" id="cake">
         <img src="images/cake.jpg" class="cake-img">
-        <!-- 17 candles -->
-        <div class="candle" style="left:10px;"><div class="flame"></div></div>
-        <div class="candle" style="left:40px;"><div class="flame"></div></div>
-        <div class="candle" style="left:70px;"><div class="flame"></div></div>
-        <div class="candle" style="left:100px;"><div class="flame"></div></div>
-        <div class="candle" style="left:130px;"><div class="flame"></div></div>
-        <div class="candle" style="left:160px;"><div class="flame"></div></div>
-        <div class="candle" style="left:190px;"><div class="flame"></div></div>
-        <div class="candle" style="left:220px;"><div class="flame"></div></div>
-        <div class="candle" style="left:250px;"><div class="flame"></div></div>
-        <div class="candle" style="left:280px;"><div class="flame"></div></div>
-        <div class="candle" style="left:310px;"><div class="flame"></div></div>
-        <div class="candle" style="left:340px;"><div class="flame"></div></div>
-        <div class="candle" style="left:370px;"><div class="flame"></div></div>
-        <div class="candle" style="left:400px;"><div class="flame"></div></div>
-        <div class="candle" style="left:430px;"><div class="flame"></div></div>
-        <div class="candle" style="left:460px;"><div class="flame"></div></div>
-        <div class="candle" style="left:490px;"><div class="flame"></div></div>
     </div>
-    <p style="color:white;margin-top:20px;">Blow into your microphone to extinguish candles 🎤</p>
+    <p style="color:white;margin-top:20px;">Click the cake 🎂</p>
 </div>
 
-<!-- PAGE 1 - Envelope -->
+<!-- PAGE 1 -->
 <div class="page hidden" id="page1">
-    <img src="images/envelope.gif" id="envelope" class="animated-envelope" alt="Animated Envelope">
+    <img src="images/envelope.gif" id="envelope" class="animated-envelope">
 </div>
 
-<!-- PAGE 2 - Happy Birthday -->
+<!-- PAGE 2 -->
 <div class="page hidden" id="page2">
     <h1>🎉 HAPPY BIRTHDAY 🎂</h1>
-    <img src="images/bear1.png" class="floating-icon big" style="top:50px; left:50px;">
-    <img src="images/flower1.png" class="floating-icon small" style="top:150px; right:100px;">
-    <img src="images/flower2.png" class="floating-icon small" style="top:250px; left:200px;">
-    <img src="images/bear2.png" class="floating-icon small" style="bottom:50px; right:50px;">
-    <div class="balloon" style="left:100px; animation-duration:8s;">🎈</div>
-    <div class="balloon" style="left:300px; animation-duration:6s;">🎈</div>
-    <div class="balloon" style="left:500px; animation-duration:7s;">🎈</div>
-    <div class="click-instruction">Click anywhere to continue</div>
+
+    <img src="images/bear1.png" class="floating-icon" style="top:50px;left:50px;width:150px;">
+    <img src="images/bear2.png" class="floating-icon" style="bottom:50px;right:50px;width:100px;">
+
+    <div class="balloon" style="left:100px;animation-duration:7s;">🎈</div>
+    <div class="balloon" style="left:300px;animation-duration:6s;">🎈</div>
+
+    <p style="color:white;margin-top:30px;">Click anywhere to continue</p>
 </div>
 
-<!-- PAGE 3 - Photo -->
+<!-- PAGE 3 -->
 <div class="page hidden" id="page3">
     <div class="photo-container">
-        <img src="images/photo.png" class="photo" alt="Your Photo">
+        <img src="images/photo.png" class="photo">
     </div>
     <div class="typing" id="typingPhoto"></div>
-    <img src="images/bear3.png" class="floating-icon small" style="bottom:50px; left:50px;">
     <button id="nextBtn">Read Your Special Letter</button>
 </div>
 
-<!-- PAGE 4 - Letter -->
+<!-- PAGE 4 -->
 <div class="page hidden" id="page4">
-    <h2>My Letter to You <span>💌</span></h2>
+    <h2>My Letter to You 💌</h2>
     <div class="letter" id="letter"></div>
 </div>
 
-<!-- Audio -->
-<audio id="happySong">
-    <source src="happy.mp3" type="audio/mpeg">
-</audio>
 <audio id="bg-music" loop>
     <source src="song.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-// Pages
 const page0 = document.getElementById("page0");
 const page1 = document.getElementById("page1");
 const page2 = document.getElementById("page2");
 const page3 = document.getElementById("page3");
 const page4 = document.getElementById("page4");
 const envelope = document.getElementById("envelope");
-const transitionOverlay = document.getElementById("transitionOverlay");
-const happySong = document.getElementById("happySong");
+const overlay = document.getElementById("transitionOverlay");
 const music = document.getElementById("bg-music");
-const flames = document.querySelectorAll(".flame");
 
-// Start happy song immediately
-happySong.play().catch(e => console.log("Autoplay prevented"));
-
-// Microphone detection for blowing
-navigator.mediaDevices.getUserMedia({ audio:true })
-.then(stream => {
-    const audioContext = new (window.AudioContext||window.webkitAudioContext)();
-    const analyser = audioContext.createAnalyser();
-    const microphone = audioContext.createMediaStreamSource(stream);
-    microphone.connect(analyser);
-    analyser.fftSize = 256;
-    const dataArray = new Uint8Array(analyser.frequencyBinCount);
-
-    function checkVolume() {
-        analyser.getByteFrequencyData(dataArray);
-        let sum = dataArray.reduce((a,b)=>a+b,0)/dataArray.length;
-        if(sum>60){ // threshold for blow
-            flames.forEach(f=>f.style.display="none"); // extinguish flames
-            happySong.pause();
-            page0.classList.add("hidden");
-            page1.classList.remove("hidden");
-            startEnvelope(); // auto envelope animation
-        } else {
-            requestAnimationFrame(checkVolume);
-        }
-    }
-    checkVolume();
-}).catch(err=>{
-    alert("Microphone access is required to blow the candles!");
-});
-
-// Envelope automatic after cake
-function startEnvelope(){
+/* Cake click */
+document.getElementById("cake").addEventListener("click", ()=>{
+    page0.classList.add("hidden");
+    page1.classList.remove("hidden");
     envelope.classList.add("opening");
-    setTimeout(()=>{ transitionOverlay.classList.add("active"); }, 500);
+
+    setTimeout(()=>overlay.classList.add("active"),500);
     setTimeout(()=>{
+        overlay.classList.remove("active");
         page1.classList.add("hidden");
         page2.classList.remove("hidden");
-        transitionOverlay.classList.remove("active");
-        music.play().catch(e=>console.log("bg music autoplay blocked"));
+        music.play().catch(()=>{});
     },1200);
-}
+});
 
-// Click page2 -> page3
+/* Page 2 */
 page2.addEventListener("click", ()=>{
     page2.classList.add("hidden");
     page3.classList.remove("hidden");
-    typeWriterPhoto();
+    typePhoto();
 });
 
-// Photo page typing
+/* Typing photo text */
 const typingPhoto = document.getElementById("typingPhoto");
-let iPhoto=0;
-function typeWriterPhoto(){
+let i=0;
+function typePhoto(){
     const text="You're my favorite person! 💖";
-    if(iPhoto<text.length){
-        typingPhoto.innerHTML += text.charAt(iPhoto);
-        iPhoto++;
-        setTimeout(typeWriterPhoto,120);
+    if(i<text.length){
+        typingPhoto.innerHTML += text.charAt(i++);
+        setTimeout(typePhoto,120);
     }
 }
 
-// Photo page -> Letter page
+/* To letter */
 document.getElementById("nextBtn").addEventListener("click", ()=>{
     page3.classList.add("hidden");
     page4.classList.remove("hidden");
     typeLetter();
 });
 
-// Letter page typing
-const letter = document.getElementById("letter");
+/* Letter typing */
 const letterLines=[
 "Uhmmmmm uhmmm you r the soul straight from a fairy tale 🎀💎",
 "The costliest gem I own, my muffin my cupcake 🧁",
 "Mera aawwjwjyeyevsjsks bear 💖 ahhhhhhhh",
-"Ryt now I just want to !!!!!!! iffff uk uk !!",
 "",
 "It took 11 years to be friends 🌝🛐 it was meant to be !!!!",
 "And I legit don't know how u fell for me 😁",
-"Hehe ik I'm soo good 😌 jokes apart !",
 "",
-"Messages txts can't express the feeling I feel for youh!",
-"I wish the time should pause when I'm with you, like just us !!!!",
-"Like Ig I have never waited for something that too very concentrated",
-"kinda until it was waiting for you !!",
-"",
-"Like the aim was to just love you from afar coz I didn't want",
-"our friendship to spoil coz of my dumb confession !!!",
-"It's the universe thing okie !!",
 "IT WILL BE FROM ME TO YOU IN EVERY UNIVERSE !!!!",
-"",
 "MWAHHHHHHHHHHH 💗"
 ];
-let currentLine=0;
+
+let line=0;
+const letterDiv=document.getElementById("letter");
+
 function typeLetter(){
-    if(currentLine<letterLines.length){
-        let line=letterLines[currentLine];
-        let charIndex=0;
+    if(line<letterLines.length){
+        let txt=letterLines[line], j=0;
         function typeChar(){
-            if(charIndex<line.length){
-                letter.innerHTML += line.charAt(charIndex);
-                charIndex++;
+            if(j<txt.length){
+                letterDiv.innerHTML+=txt.charAt(j++);
                 setTimeout(typeChar,50);
             }else{
-                letter.innerHTML+="<br>";
-                currentLine++;
+                letterDiv.innerHTML+="<br>";
+                line++;
                 setTimeout(typeLetter,400);
             }
         }
@@ -273,5 +244,6 @@ function typeLetter(){
     }
 }
 </script>
+
 </body>
 </html>
