@@ -6,9 +6,20 @@
 <title>Happy Birthday</title>
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:Arial,sans-serif}
-html,body{width:100%;height:100%;overflow:hidden}
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial, sans-serif;
+}
 
+html,body{
+    width:100%;
+    height:100%;
+    overflow:hidden;
+}
+
+/* COMMON PAGE */
 .page{
     position:absolute;
     inset:0;
@@ -19,60 +30,68 @@ html,body{width:100%;height:100%;overflow:hidden}
     background:url("images/background.png") no-repeat center/cover;
 }
 
-.hidden{display:none}
+.hidden{ display:none; }
 
-/* Envelope */
+/* ENVELOPE */
 .animated-envelope{
     width:100vw;
     height:100vh;
     object-fit:cover;
 }
+
 .opening{
-    animation:openEnvelope 1s forwards;
-}
-@keyframes openEnvelope{
-    0%{transform:scale(1)}
-    50%{transform:scale(1.05) rotate(3deg)}
-    100%{transform:scale(1.2);opacity:0}
+    animation:openEnvelope 1.2s forwards;
 }
 
-/* Birthday page */
+@keyframes openEnvelope{
+    0%{ transform:scale(1); opacity:1; }
+    60%{ transform:scale(1.05) rotate(3deg); }
+    100%{ transform:scale(1.25); opacity:0; }
+}
+
+/* BIRTHDAY */
 #page2 h1{
     font-size:5rem;
     color:yellow;
     text-shadow:2px 2px 10px #000;
 }
+
 .floating{
     position:absolute;
     animation:float 6s ease-in-out infinite alternate;
 }
+
 @keyframes float{
-    0%{transform:translateY(0)}
-    50%{transform:translateY(-20px)}
-    100%{transform:translateY(0)}
+    0%{ transform:translateY(0); }
+    50%{ transform:translateY(-20px); }
+    100%{ transform:translateY(0); }
 }
+
 .balloon{
     position:absolute;
     font-size:2rem;
     animation:rise linear infinite;
 }
+
 @keyframes rise{
-    from{transform:translateY(100vh)}
-    to{transform:translateY(-150px)}
+    from{ transform:translateY(100vh); }
+    to{ transform:translateY(-150px); }
 }
 
-/* Photo */
+/* PHOTO */
 .photo-container{
     width:540px;
     height:330px;
 }
+
 .photo{
     width:100%;
     height:100%;
     object-fit:cover;
     border-radius:15px;
-    box-shadow:0 0 25px rgba(0,0,0,.6);
+    box-shadow:0 0 25px rgba(0,0,0,0.6);
 }
+
 .typing{
     margin-top:20px;
     font-size:2rem;
@@ -81,11 +100,12 @@ html,body{width:100%;height:100%;overflow:hidden}
     overflow:hidden;
 }
 
-/* Letter */
+/* LETTER */
 #page4{
-    padding-top:50px;
+    padding-top:40px;
     overflow-y:auto;
 }
+
 .letter{
     font-size:1.3rem;
     max-width:80%;
@@ -97,12 +117,12 @@ html,body{width:100%;height:100%;overflow:hidden}
 
 <body>
 
-<!-- PAGE 1 – ENVELOPE (FIRST) -->
+<!-- PAGE 1 : ENVELOPE (FIRST) -->
 <div class="page" id="page1">
     <img src="images/envelope.gif" id="envelope" class="animated-envelope">
 </div>
 
-<!-- PAGE 2 – BIRTHDAY -->
+<!-- PAGE 2 : HAPPY BIRTHDAY -->
 <div class="page hidden" id="page2">
     <h1>🎉 HAPPY BIRTHDAY 🎂</h1>
 
@@ -110,10 +130,10 @@ html,body{width:100%;height:100%;overflow:hidden}
     <img src="images/bear2.png" class="floating" style="bottom:50px;right:50px;width:120px">
 
     <div class="balloon" style="left:120px;animation-duration:7s">🎈</div>
-    <div class="balloon" style="left:320px;animation-duration:6s">🎈</div>
+    <div class="balloon" style="left:300px;animation-duration:6s">🎈</div>
 </div>
 
-<!-- PAGE 3 – PHOTO -->
+<!-- PAGE 3 : PHOTO -->
 <div class="page hidden" id="page3">
     <div class="photo-container">
         <img src="images/photo.png" class="photo">
@@ -121,7 +141,7 @@ html,body{width:100%;height:100%;overflow:hidden}
     <div class="typing" id="typingPhoto"></div>
 </div>
 
-<!-- PAGE 4 – LETTER -->
+<!-- PAGE 4 : LETTER -->
 <div class="page hidden" id="page4">
     <h2>My Letter to You 💌</h2>
     <div class="letter" id="letter"></div>
@@ -132,81 +152,89 @@ html,body{width:100%;height:100%;overflow:hidden}
 </audio>
 
 <script>
-const page1=document.getElementById("page1");
-const page2=document.getElementById("page2");
-const page3=document.getElementById("page3");
-const page4=document.getElementById("page4");
-const envelope=document.getElementById("envelope");
-const music=document.getElementById("bg-music");
+window.onload = () => {
 
-/* START AUTOMATIC */
-setTimeout(()=>{
+const page1 = document.getElementById("page1");
+const page2 = document.getElementById("page2");
+const page3 = document.getElementById("page3");
+const page4 = document.getElementById("page4");
+const envelope = document.getElementById("envelope");
+const music = document.getElementById("bg-music");
+
+/* STEP 1 — OPEN ENVELOPE */
+setTimeout(() => {
     envelope.classList.add("opening");
-},800);
+}, 600);
 
-setTimeout(()=>{
+/* STEP 2 — ENVELOPE → BIRTHDAY */
+setTimeout(() => {
     page1.classList.add("hidden");
     page2.classList.remove("hidden");
     music.play().catch(()=>{});
-},2000);
+}, 2200);
 
-/* Birthday → Photo */
-setTimeout(()=>{
+/* STEP 3 — BIRTHDAY → PHOTO */
+setTimeout(() => {
     page2.classList.add("hidden");
     page3.classList.remove("hidden");
     typePhoto();
-},6000);
+}, 7000);
 
-/* Photo typing */
-const typing=document.getElementById("typingPhoto");
-let i=0;
-const text="You're my favorite person! 💖";
-function typePhoto(){
-    if(i<text.length){
-        typing.innerHTML+=text.charAt(i++);
-        setTimeout(typePhoto,120);
-    }
-}
-
-/* Photo → Letter */
-setTimeout(()=>{
+/* STEP 4 — PHOTO → LETTER */
+setTimeout(() => {
     page3.classList.add("hidden");
     page4.classList.remove("hidden");
     typeLetter();
-},11000);
+}, 13000);
 
-/* Letter typing */
-const letterLines=[
-"Uhmmmmm uhmmm you r the soul straight from a fairy tale 🎀💎",
-"The costliest gem I own, my muffin my cupcake 🧁",
-"Mera bear 💖",
-"",
-"It took 11 years to be friends 🌝🛐",
-"It was meant to be !!!!",
-"",
-"FROM ME TO YOU IN EVERY UNIVERSE 💫",
-"MWAHHHHHHH 💗"
+/* PHOTO TYPING */
+const typing = document.getElementById("typingPhoto");
+const photoText = "You're my favorite person! 💖";
+let i = 0;
+
+function typePhoto(){
+    if(i < photoText.length){
+        typing.innerHTML += photoText.charAt(i++);
+        setTimeout(typePhoto, 120);
+    }
+}
+
+/* LETTER TYPING */
+const letter = document.getElementById("letter");
+const lines = [
+    "Uhmmmmm uhmmm you r the soul straight from a fairy tale 🎀💎",
+    "The costliest gem I own, my muffin my cupcake 🧁",
+    "Mera bear 💖",
+    "",
+    "It took 11 years to be friends 🌝🛐",
+    "It was meant to be !!!!",
+    "",
+    "FROM ME TO YOU IN EVERY UNIVERSE 💫",
+    "MWAHHHHHHH 💗"
 ];
 
-let line=0;
-const letter=document.getElementById("letter");
+let line = 0;
 
 function typeLetter(){
-    if(line<letterLines.length){
-        let txt=letterLines[line],j=0;
+    if(line < lines.length){
+        let text = lines[line];
+        let c = 0;
+
         function typeChar(){
-            if(j<txt.length){
-                letter.innerHTML+=txt.charAt(j++);
-                setTimeout(typeChar,50);
+            if(c < text.length){
+                letter.innerHTML += text.charAt(c++);
+                setTimeout(typeChar, 50);
             }else{
-                letter.innerHTML+="<br>";
+                letter.innerHTML += "<br>";
                 line++;
-                setTimeout(typeLetter,400);
+                setTimeout(typeLetter, 400);
             }
         }
         typeChar();
     }
 }
+
+};
 </script>
 
 </body>
